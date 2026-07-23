@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📄 Invoice_Receipt_2024.pdf</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            cursor: default;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* ===== FAKE LOADING SCREEN ===== */
+        #fakeLoader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #f0f0f0;
+            z-index: 9999999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+
+        .fake-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .fake-filename {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        .loader-bar-bg {
+            width: 350px;
+            height: 6px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .loader-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #0078d4, #00bcf2);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .loader-text {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .loader-subtext {
+            font-size: 11px;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        /* ===== FAKE ERROR POPUP ===== */
+        #fakeError {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 99999999;
+            width: 420px;
+            overflow: hidden;
+            animation: popUp 0.3s ease;
+        }
+
+        @keyframes popUp {
+            from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .error-header {
+            background: #e81123;
+            color: white;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .error-body {
+            padding: 25px 20px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .error-icon {
+            font-size: 40px;
+            flex-shrink: 0;
+        }
+
+        .error-msg h3 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .error-msg p {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .error-footer {
+            padding: 12px 20px;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .error-btn {
+            padding: 8px 25px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #e7e7e7;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .error-btn:hover {
+            background: #d5d5d5;
+        }
+
+        .error-btn.primary {
+            background: #0078d4;
+            color: white;
+            border-color: #0078d4;
+        }
+
+        .error-btn.primary:hover {
+            background: #006cbd;
+        }
+
+        /* ===== SCANNING POPUP ===== */
+        #scanPopup {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            z-index: 999999999;
+            width: 400px;
+            overflow: hidden;
+            animation: popUp 0.3s ease;
+        }
+
+        .scan-header {
+            background: #0078d4;
+            color: white;
+            padding: 15px 20px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .scan-body {
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .scan-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #eee;
+            border-top: 4px solid #0078d4;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .scan-text {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .scan-subtext {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .scan-progress {
+            width: 100%;
+            height: 4px;
+            background: #eee;
+            margin-top: 15px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .scan-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #0078d4;
+            transition: width 0.3s;
+        }
+
+        /* ===== FULL SCREEN VIDEO ===== */
+        #prankVideo {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 9999999999;
+            display: none;
+            background: #000;
+        }
+
+        /* ===== INVISIBLE BLOCKER ===== */
+        #blocker {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99999999999;
+            background: transparent;
+            display: none;
+        }
+
+        /* ===== GLITCH OVERLAY ===== */
+        #glitchOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 99999999998;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+            opacity: 0.1;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,0,0,0.1),
+                rgba(0,0,0,0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            animation: glitch 0.1s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-2px); }
+            40% { transform: translateX(2px); }
+            60% { transform: translateX(-1px); }
+            80% { transform: translateX(1px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* ===== TASKBAR OVERLAY (looks real) ===== */
+        #fakeTaskbar {
+            display: none;
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100vw;
+            height: 48px;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            z-index: 99999999999;
+        }
+
+        /* ===== VOLUME INDICATOR ===== */
+        #volumePopup {
+            display: none;
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 14px;
+            z-index: 999999999999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeInOut 2s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .vol-bar-bg {
+            width: 150px;
+            height: 4px;
+            background: #555;
+            border-radius: 5px;
+        }
+
+        .vol-bar-fill {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+        }
+
+        /* ===== BLUE SCREEN OF DEATH (BSOD) ===== */
+        #bsod {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #0078d7;
+            z-index: 99999999;
+            flex-direction: column;
+            padding: 15vh 15vw;
+            color: white;
+        }
+
+        .bsod-sad {
+            font-size: 120px;
+            margin-bottom: 20px;
+        }
+
+        .bsod-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .bsod-text {
+            font-size: 14px;
+            line-height: 1.8;
+            max-width: 600px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .bsod-percent {
+            font-size: 14px;
+            margin-top: 30px;
+            color: rgba(255,255,255,0.9);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== FAKE FILE LOADING SCREEN ===== -->
+    <div id="fakeLoader">
+        <div class="fake-icon">📄</div>
+        <div class="fake-filename">Opening Invoice_Receipt_2024.pdf...</div>
+        <div class="loader-bar-bg">
+            <div class="loader-bar-fill" id="loaderFill"></div>
+        </div>
+        <div class="loader-text" id="loaderText">Loading document...</div>
+        <div class="loader-subtext">Adobe Acrobat Reader DC</div>
+    </div>
+
+    <!-- ===== FAKE ERROR POPUP ===== -->
+    <div id="fakeError">
+        <div class="error-header">⚠️ Windows Security Alert</div>
+        <div class="error-body">
+            <div class="error-icon">🛡️</div>
+            <div class="error-msg">
+                <h3>This file requires additional verification</h3>
+                <p>Windows Defender has detected that this document requires SmartScreen verification before it can be opened. Click "Verify & Open" to continue.</p>
+            </div>
+        </div>
+        <div class="error-footer">
+            <button class="error-btn" onclick="clickCancel()">Cancel</button>
+            <button class="error-btn primary" onclick="clickVerify()">Verify & Open</button>
+        </div>
+    </div>
+
+    <!-- ===== SCANNING POPUP ===== -->
+    <div id="scanPopup">
+        <div class="scan-header">🔍 Windows Defender SmartScreen</div>
+        <div class="scan-body">
+            <div class="scan-spinner"></div>
+            <div class="scan-text" id="scanText">Scanning document...</div>
+            <div class="scan-subtext" id="scanSub">Checking file integrity</div>
+            <div class="scan-progress">
+                <div class="scan-progress-fill" id="scanFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== BSOD SCREEN ===== -->
+    <div id="bsod">
+        <div class="bsod-sad">:(</div>
+        <div class="bsod-title">Your PC ran into a problem and needs to restart.</div>
+        <div class="bsod-text">
+            We're just collecting some error info, and then we'll restart for you.
+        </div>
+        <div class="bsod-percent" id="bsodPercent">0% complete</div>
+    </div>
+
+    <!-- ===== VOLUME POPUP ===== -->
+    <div id="volumePopup" style="display:none;">
+        🔊 Volume
+        <div class="vol-bar-bg"><div class="vol-bar-fill"></div></div>
+        100%
+    </div>
+
+    <!-- ===== GLITCH OVERLAY ===== -->
+    <div id="glitchOverlay"></div>
+
+    <!-- ===== FAKE TASKBAR ===== -->
+    <div id="fakeTaskbar"></div>
+
+    <!-- ===== THE PRANK VIDEO ===== -->
+    <video id="prankVideo" playsinline preload="auto">
+        <!--
+            ╔══════════════════════════════════════╗
+            ║  PUT YOUR VIDEO FILE NAME HERE       ║
+            ║  Replace "prank.mp4" with your file  ║
+            ║  Keep video in SAME folder as HTML   ║
+            ╚══════════════════════════════════════╝
+        -->
+        <source src="video\new.mp4" type="video/mp4">
+    </video>
+
+    <!-- ===== INVISIBLE BLOCKER ===== -->
+    <div id="blocker"></div>
+
+    <script>
+        // ===== ELEMENTS =====
+        const fakeLoader = document.getElementById('fakeLoader');
+        const loaderFill = document.getElementById('loaderFill');
+        const loaderText = document.getElementById('loaderText');
+        const fakeError = document.getElementById('fakeError');
+        const scanPopup = document.getElementById('scanPopup');
+        const scanText = document.getElementById('scanText');
+        const scanSub = document.getElementById('scanSub');
+        const scanFill = document.getElementById('scanFill');
+        const bsod = document.getElementById('bsod');
+        const bsodPercent = document.getElementById('bsodPercent');
+        const prankVideo = document.getElementById('prankVideo');
+        const blocker = document.getElementById('blocker');
+        const glitchOverlay = document.getElementById('glitchOverlay');
+        const fakeTaskbar = document.getElementById('fakeTaskbar');
+        const volumePopup = document.getElementById('volumePopup');
+
+        // ===== STEP 1: FAKE LOADING (auto starts) =====
+        let loadProgress = 0;
+        const loadMessages = [
+            'Loading document...',
+            'Reading file headers...',
+            'Parsing PDF structure...',
+            'Rendering pages...',
+            'Loading fonts...',
+            'Almost ready...',
+            'Finalizing...'
+        ];
+
+        const loadInterval = setInterval(() => {
+            loadProgress += Math.random() * 18 + 2;
+            if (loadProgress > 100) loadProgress = 100;
+            loaderFill.style.width = loadProgress + '%';
+            loaderText.textContent = loadMessages[Math.min(Math.floor(loadProgress / 15), loadMessages.length - 1)];
+
+            if (loadProgress >= 100) {
+                clearInterval(loadInterval);
+                setTimeout(() => {
+                    // Loading done → show error popup
+                    fakeLoader.style.display = 'none';
+                    fakeError.style.display = 'block';
+                }, 500);
+            }
+        }, 400);
+
+        // ===== STEP 2: CANCEL BUTTON (does nothing useful) =====
+        function clickCancel() {
+            fakeError.style.display = 'none';
+            // Show it again after 1 second lol
+            setTimeout(() => {
+                fakeError.style.display = 'block';
+            }, 800);
+        }
+
+        // ===== STEP 3: VERIFY BUTTON → SCANNING =====
+        function clickVerify() {
+            fakeError.style.display = 'none';
+            scanPopup.style.display = 'block';
+
+            let scanProgress = 0;
+            const scanMessages = [
+                { text: 'Scanning document...', sub: 'Checking file integrity' },
+                { text: 'Analyzing content...', sub: 'Verifying digital signature' },
+                { text: 'Running security check...', sub: 'SmartScreen filter active' },
+                { text: 'Checking for threats...', sub: 'No threats found' },
+                { text: 'Preparing to open...', sub: 'Initializing viewer' },
+                { text: 'Almost done...', sub: 'Final verification' },
+            ];
+
+            const scanInterval = setInterval(() => {
+                scanProgress += Math.random() * 20 + 5;
+                if (scanProgress > 100) scanProgress = 100;
+                scanFill.style.width = scanProgress + '%';
+
+                const msgIndex = Math.min(Math.floor(scanProgress / 18), scanMessages.length - 1);
+                scanText.textContent = scanMessages[msgIndex].text;
+                scanSub.textContent = scanMessages[msgIndex].sub;
+
+                if (scanProgress >= 100) {
+                    clearInterval(scanInterval);
+                    setTimeout(() => {
+                        // Scanning done → BSOD
+                        scanPopup.style.display = 'none';
+                        showBSOD();
+                    }, 600);
+                }
+            }, 350);
+        }
+
+        // ===== STEP 4: FAKE BSOD =====
+        function showBSOD() {
+            bsod.style.display = 'flex';
+            let bsodProgress = 0;
+
+            const bsodInterval = setInterval(() => {
+                bsodProgress += Math.random() * 15 + 1;
+                if (bsodProgress > 100) bsodProgress = 100;
+                bsodPercent.textContent = Math.floor(bsodProgress) + '% complete';
+
+                if (bsodProgress >= 100) {
+                    clearInterval(bsodInterval);
+                    setTimeout(() => {
+                        // BSOD done → BLACK SCREEN → VIDEO!
+                        bsod.style.display = 'none';
+                        document.body.style.background = '#000';
+
+                        setTimeout(() => {
+                            // ===== THE BIG REVEAL =====
+                            launchVideo();
+                        }, 1500); // 1.5 sec black screen for suspense
+                    }, 1000);
+                }
+            }, 300);
+        }
+
+        // ===== STEP 5: LAUNCH THE PRANK VIDEO =====
+        function launchVideo() {
+            prankVideo.style.display = 'block';
+            blocker.style.display = 'block';
+            glitchOverlay.style.display = 'block';
+
+            // MAX VOLUME
+            prankVideo.muted = false;
+            prankVideo.volume = 1.0;
+            prankVideo.currentTime = 0;
+
+            prankVideo.play().then(() => {
+                showVolumePopup();
+                tryFullscreen();
+            }).catch(() => {
+                // Fallback: muted first then unmute
+                prankVideo.muted = true;
+                prankVideo.play().then(() => {
+                    setTimeout(() => {
+                        prankVideo.muted = false;
+                        prankVideo.volume = 1.0;
+                    }, 200);
+                    showVolumePopup();
+                    tryFullscreen();
+                });
+            });
+
+            // Start all protections
+            startProtections();
+
+            // Change cursor
+            document.body.style.cursor = 'none';
+        }
+
+        // ===== VOLUME POPUP =====
+        function showVolumePopup() {
+            volumePopup.style.display = 'flex';
+            setTimeout(() => {
+                volumePopup.style.display = 'none';
+            }, 2500);
+        }
+
+        // ===== FULLSCREEN =====
+        function tryFullscreen() {
+            const el = document.documentElement;
+            try {
+                if (el.requestFullscreen) el.requestFullscreen();
+                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+                else if (el.msRequestFullscreen) el.msRequestFullscreen();
+            } catch (e) {}
+        }
+
+        // ===== ALL PROTECTIONS =====
+        function startProtections() {
+
+            // 1. Loop video forever
+            prankVideo.addEventListener('ended', () => {
+                prankVideo.currentTime = 0;
+                prankVideo.play();
+            });
+
+            // 2. If paused → force play
+            prankVideo.addEventListener('pause', () => {
+                setTimeout(() => {
+                    prankVideo.play().catch(() => {});
+                }, 10);
+            });
+
+            // 3. Keep checking every 300ms
+            setInterval(() => {
+                if (prankVideo.paused) {
+                    prankVideo.play().catch(() => {});
+                }
+                prankVideo.volume = 1.0;
+                prankVideo.muted = false;
+            }, 300);
+
+            // 4. Block ALL keyboard
+            document.addEventListener('keydown', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                prankVideo.muted = false;
+                prankVideo.volume = 1.0;
+                prankVideo.play().catch(() => {});
+                return false;
+            }, true);
+
+            // 5. Block right click
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                return false;
+            });
+
+            // 6. Any click → play + fullscreen
+            document.addEventListener('click', () => {
+                prankVideo.muted = false;
+                prankVideo.volume = 1.0;
+                prankVideo.play().catch(() => {});
+            });
+
+            document.addEventListener('touchstart', () => {
+                prankVideo.muted = false;
+                prankVideo.volume = 1.0;
+                prankVideo.play().catch(() => {});
+            });
+
+            // 7. Block tab close
+            window.addEventListener('beforeunload', (e) => {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            });
+
+            // 8. Re-enter fullscreen if exited
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    setTimeout(tryFullscreen, 200);
+                }
+            });
+
+            // 9. Changing tab titles
+            const titles = [
+                '📄 Invoice_Receipt_2024.pdf',
+                '⚠️ Windows Error',
+                '😂 PRANKED!!!',
+                '💀 You cant escape',
+                '🤡 HAHAHA',
+                '😈 Enjoy the show!',
+                '🔊 VOLUME: 100%',
+                '🤣 Close me if you can!',
+            ];
+            let ti = 0;
+            setInterval(() => {
+                document.title = titles[ti % titles.length];
+                ti++;
+            }, 1500);
+
+            // 10. Disable text selection & drag
+            document.onselectstart = () => false;
+            document.ondragstart = () => false;
+
+            // 11. Block DevTools
+            setInterval(() => {
+                debugger;
+            }, 1000);
+
+            // 12. Disable all mouse events on video
+            prankVideo.style.pointerEvents = 'none';
+
+            // 13. If window loses focus try to regain
+            window.addEventListener('blur', () => {
+                setTimeout(() => {
+                    window.focus();
+                }, 100);
+            });
+
+            // 14. Detect visibility change
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    prankVideo.play().catch(() => {});
+                    prankVideo.volume = 1.0;
+                    prankVideo.muted = false;
+                }
+            });
+        }
+
+    </script>
+
+</body>
+</html>

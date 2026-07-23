@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You Won $10,000! 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+
+        /* FAKE PRIZE SCREEN */
+        #fakeScreen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3);
+            background-size: 400% 400%;
+            animation: bgMove 3s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            cursor: pointer;
+        }
+
+        @keyframes bgMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #fakeScreen h1 {
+            font-size: 3rem;
+            color: white;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            animation: bounce 0.6s infinite alternate;
+        }
+
+        #fakeScreen h2 {
+            font-size: 5rem;
+            color: #fff200;
+            text-shadow: 3px 3px 15px rgba(0,0,0,0.6);
+            margin: 20px 0;
+        }
+
+        #fakeScreen .btn {
+            padding: 20px 60px;
+            font-size: 1.8rem;
+            background: #ff3838;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 30px rgba(255,56,56,0.6);
+            margin-top: 20px;
+        }
+
+        #fakeScreen p {
+            color: white;
+            font-size: 1.2rem;
+            margin-top: 15px;
+            animation: blink 0.5s infinite;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-15px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* PRANK SCREEN */
+        #prankScreen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #000;
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #prankText {
+            font-size: 4rem;
+            color: #ff3838;
+            font-weight: bold;
+            text-align: center;
+            animation: shake 0.1s infinite;
+            text-shadow: 0 0 20px red;
+        }
+
+        #trollFace {
+            font-size: 10rem;
+            animation: spin 1s linear infinite;
+            margin: 20px;
+        }
+
+        #subText {
+            font-size: 1.5rem;
+            color: #aaa;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(0px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(2px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(2px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* CONFETTI */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 1001;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                top: 110vh;
+                transform: rotate(720deg);
+            }
+        }
+
+        /* FLYING EMOJIS */
+        .flyEmoji {
+            position: fixed;
+            font-size: 3rem;
+            z-index: 1002;
+            animation: flyAround 2s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes flyAround {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, -200px) rotate(90deg); }
+            50% { transform: translate(-100px, -100px) rotate(180deg); }
+            75% { transform: translate(200px, 100px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        /* POPUP BOXES */
+        .popup {
+            position: fixed;
+            background: white;
+            color: black;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 1003;
+            animation: popIn 0.3s ease;
+            cursor: default;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        /* SCREEN FLASH */
+        #flash {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1004;
+            animation: flashAnim 0.1s linear;
+        }
+
+        @keyframes flashAnim {
+            0% { background: white; }
+            100% { background: transparent; }
+        }
+
+        /* FAKE LOADING BAR */
+        #loadingBar {
+            display: none;
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 30px;
+            background: #333;
+            border-radius: 15px;
+            overflow: hidden;
+            z-index: 1005;
+        }
+
+        #loadingFill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff3838, #ff9f43, #feca57);
+            border-radius: 15px;
+            transition: width 0.3s;
+        }
+
+        #loadingText {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff3838;
+            font-size: 1.2rem;
+            font-weight: bold;
+            z-index: 1005;
+        }
+
+        /* CURSOR TRAIL */
+        .cursorTrail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1006;
+            animation: trailFade 0.5s forwards;
+        }
+
+        @keyframes trailFade {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FAKE PRIZE SCREEN -->
+    <div id="fakeScreen" onclick="startPrank()">
+        <h1>🎉 CONGRATULATIONS! 🎉</h1>
+        <h2>💰 $10,000 💰</h2>
+        <button class="btn">🎁 CLAIM YOUR PRIZE NOW!</button>
+        <p>⚠️ HURRY! Offer expires in 10 seconds!</p>
+    </div>
+
+    <!-- PRANK SCREEN -->
+    <div id="prankScreen">
+        <div id="trollFace">😂</div>
+        <div id="prankText">YOU GOT PRANKED!</div>
+        <div id="subText">There is no prize 😜<br>Have a great day! 🤣</div>
+    </div>
+
+    <!-- SCREEN FLASH -->
+    <div id="flash"></div>
+
+    <!-- LOADING BAR -->
+    <div id="loadingBar"><div id="loadingFill"></div></div>
+    <div id="loadingText">⏳ Processing your prize...</div>
+
+    <script>
+        let pranked = false;
+
+        function startPrank() {
+            if (pranked) return;
+            pranked = true;
+
+            const fakeScreen = document.getElementById('fakeScreen');
+            const prankScreen = document.getElementById('prankScreen');
+            const loadingBar = document.getElementById('loadingBar');
+            const loadingFill = document.getElementById('loadingFill');
+            const loadingText = document.getElementById('loadingText');
+
+            // STEP 1: Show fake loading
+            loadingBar.style.display = 'block';
+            loadingText.style.display = 'block';
+
+            let progress = 0;
+            const loadInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 100) progress = 100;
+                loadingFill.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(loadInterval);
+
+                    setTimeout(() => {
+                        // STEP 2: Flash screen
+                        flashScreen();
+
+                        // STEP 3: Show prank
+                        fakeScreen.style.display = 'none';
+                        loadingBar.style.display = 'none';
+                        loadingText.style.display = 'none';
+                        prankScreen.style.display = 'flex';
+
+                        // STEP 4: Start chaos!
+                        startConfetti();
+                        startFlyingEmojis();
+                        startPopups();
+                        startCursorTrail();
+                        shakeScreen();
+                        spamAlerts();
+
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        // FLASH SCREEN
+        function flashScreen() {
+            const flash = document.getElementById('flash');
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    flash.style.display = 'block';
+                    flash.style.background = ['white', 'red', 'yellow', 'blue', 'green'][i];
+                    setTimeout(() => { flash.style.display = 'none'; }, 80);
+                }, i * 150);
+            }
+        }
+
+        // CONFETTI
+        function startConfetti() {
+            const colors = ['#ff3838', '#feca57', '#48dbfb', '#ff9ff3', '#00d2d3', '#ff6b6b', '#54a0ff', '#5f27cd'];
+            setInterval(() => {
+                const conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.width = (Math.random() * 15 + 5) + 'px';
+                conf.style.height = (Math.random() * 15 + 5) + 'px';
+                conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                conf.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                document.body.appendChild(conf);
+                setTimeout(() => conf.remove(), 3000);
+            }, 50);
+        }
+
+        // FLYING EMOJIS
+        function startFlyingEmojis() {
+            const emojis = ['😂', '🤣', '💀', '👻', '🤡', '😜', '🎉', '🤪', '😈', '👀', '🙈', '💩'];
+            setInterval(() => {
+                const emoji = document.createElement('div');
+                emoji.className = 'flyEmoji';
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                emoji.style.left = Math.random() * 90 + 'vw';
+                emoji.style.top = Math.random() * 90 + 'vh';
+                emoji.style.fontSize = (Math.random() * 3 + 2) + 'rem';
+                emoji.style.animationDuration = (Math.random() * 3 + 1) + 's';
+                document.body.appendChild(emoji);
+                setTimeout(() => emoji.remove(), 3000);
+            }, 200);
+        }
+
+        // POPUP BOXES
+        function startPopups() {
+            const messages = [
+                '😂 GOTCHA!',
+                '🤡 No prize for you!',
+                '💀 Better luck next time!',
+                '🤣 You fell for it!',
+                '😜 HAHAHA!',
+                '🎉 PRANKED!',
+                '👻 BOO!',
+                '🤪 LOL!',
+                '💩 Oops!',
+                '😈 Muahaha!',
+                '🙈 Why did you click?',
+                '👀 I see you!',
+                '🤡 Clown alert!',
+                '💀 RIP your trust',
+                '😂 Send this to a friend!'
+            ];
+
+            setInterval(() => {
+                const popup = document.createElement('div');
+                popup.className = 'popup';
+                popup.textContent = messages[Math.floor(Math.random() * messages.length)];
+                popup.style.left = Math.random() * 70 + 'vw';
+                popup.style.top = Math.random() * 70 + 'vh';
+                popup.style.background = `hsl(${Math.random() * 360}, 80%, 60%)`;
+                popup.style.color = 'white';
+                popup.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+                document.body.appendChild(popup);
+                setTimeout(() => popup.remove(), 2000);
+            }, 400);
+        }
+
+        // CURSOR TRAIL
+        function startCursorTrail() {
+            const colors = ['#ff3838', '#feca57', '#48dbfb', '#ff9ff3', '#00d2d3'];
+            document.addEventListener('mousemove', (e) => {
+                const trail = document.createElement('div');
+                trail.className = 'cursorTrail';
+                trail.style.left = e.clientX - 10 + 'px';
+                trail.style.top = e.clientY - 10 + 'px';
+                trail.style.background = colors[Math.floor(Math.random() * colors.length)];
+                document.body.appendChild(trail);
+                setTimeout(() => trail.remove(), 500);
+            });
+        }
+
+        // SHAKE SCREEN
+        function shakeScreen() {
+            let count = 0;
+            const shakeInterval = setInterval(() => {
+                const x = Math.random() * 20 - 10;
+                const y = Math.random() * 20 - 10;
+                document.body.style.transform = `translate(${x}px, ${y}px)`;
+                count++;
+                if (count > 100) {
+                    clearInterval(shakeInterval);
+                    document.body.style.transform = 'none';
+                }
+            }, 50);
+        }
+
+        // SPAM ALERT BOXES (limited)
+        function spamAlerts() {
+            const msgs = [
+                '😂 YOU GOT PRANKED!',
+                '🤣 There was never a prize!',
+                '🤡 Share this with a friend!'
+            ];
+            let i = 0;
+            function showNext() {
+                if (i < msgs.length) {
+                    setTimeout(() => {
+                        alert(msgs[i]);
+                        i++;
+                        showNext();
+                    }, 1500);
+                }
+            }
+            setTimeout(showNext, 2000);
+        }
+
+        // CHANGE TITLE RAPIDLY
+        const titles = ['😂 PRANKED!', '🤡 GOTCHA!', '💀 LOL!', '🤣 HAHA!', '😜 OOPS!'];
+        let titleIndex = 0;
+        setInterval(() => {
+            document.title = titles[titleIndex % titles.length];
+            titleIndex++;
+        }, 500);
+
+        // DISABLE RIGHT CLICK
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            alert('🤡 Nice try! No escaping!');
+        });
+
+        // DISABLE CLOSING (just shows alert)
+        window.addEventListener('beforeunload', (e) => {
+            e.preventDefault();
+            e.returnValue = '😂 Are you sure? The fun just started!';
+        });
+    </script>
+
+</body>
+</html>

